@@ -1,5 +1,5 @@
 # Db_quantum
-Base de datos Quantum en sql 
+Base de datos Quantum hecha en SQL 
 
 ## Autores
 ```
@@ -7,4 +7,5 @@ Base de datos Quantum en sql
 - Juan Alejandro Moreno Amaya
 - Juan Felipe Rodriguez Vasquez
 - Simon Steven Valbuena Beltran
+- Robinson Puentes Cardenas
 ````
