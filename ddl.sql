@@ -280,7 +280,6 @@ REFERENCES tipo_comprobante(id);
 CREATE TABLE asistencia(
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     fecha DATE,
-    fecha_ter DATE,
     hora_ingreso TIME(6),
     hora_salida TIME(6),
     id_empleado INT
