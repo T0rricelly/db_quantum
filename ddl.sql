@@ -4,9 +4,10 @@ USE quantum;
 
 -- Tablas fuertes
 CREATE TABLE tipo_documento(
-	id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+	id TINYINT(3) PRIMARY KEY AUTO_INCREMENT NOT NULL,
     tipo_documento VARCHAR(100)
 );
+
 CREATE TABLE tipo_comprobante(
 	id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     tipo_comprobante VARCHAR(100)
@@ -51,7 +52,7 @@ CREATE TABLE rol (
 	id TINYINT(3) PRIMARY KEY NOT NULL AUTO_INCREMENT,
     nombre VARCHAR(50)
 );
-CREATE TABLE area_jefe (
+CREATE TABLE area_asignada (
 	id TINYINT(3) PRIMARY KEY NOT NULL AUTO_INCREMENT,
     nombre VARCHAR(50)
 );
@@ -76,7 +77,7 @@ CREATE TABLE parentesco (
 );
 -- Tablas Debiles
 CREATE TABLE contrato (
-	id INTEGER(10),
+	id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 	fecha_inicio DATE,
     valor INT,
     id_tipo_contrato TINYINT(3),
@@ -134,7 +135,7 @@ REFERENCES estado_jefe(id);
 ALTER TABLE jefe_area
 ADD CONSTRAINT fk_id_area
 FOREIGN KEY (id_area)
-REFERENCES area_jefe(id);
+REFERENCES area_asignada(id);
 
 CREATE TABLE contacto_emergencia (
 	id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -167,13 +168,62 @@ CREATE TABLE empleado (
     id_contrato INT,
     id_tipo_estado_civil TINYINT(3),
     id_tipo_documento TINYINT(3),
-    id_tipo_sangre TINYINT(3),
+    id_grupo_sanguineo TINYINT(3),
     id_arl TINYINT(3),
     id_eps TINYINT(3),
-    id_area TINYINT(3),
+    id_area_asignada TINYINT(3),
     id_turno TINYINT(3),
     id_rol TINYINT(3)
 );
+ALTER TABLE empleado 
+ADD CONSTRAINT fk_id_contacto_emergencia
+FOREIGN KEY (id_contacto_emergencia)
+REFERENCES contacto_emergencia(id);
+
+ALTER TABLE empleado 
+ADD CONSTRAINT fk_id_contrato
+FOREIGN KEY (id_contrato)
+REFERENCES contrato(id);
+
+ALTER TABLE empleado
+ADD CONSTRAINT fk_id_tipo_estado_civil
+FOREIGN KEY (id_tipo_estado_civil)
+REFERENCES estado_civil(id);
+
+ALTER TABLE empleado
+ADD CONSTRAINT fk_id_tipo_documento
+FOREIGN KEY (id_tipo_documento)
+REFERENCES tipo_documento(id);
+
+ALTER TABLE empleado
+ADD CONSTRAINT fk_id_grupo_sanguineo_empleado
+FOREIGN KEY (id_grupo_sanguineo)
+REFERENCES grupo_sanguineo(id);
+
+ALTER TABLE empleado
+ADD CONSTRAINT fk_id_arl_empleado
+FOREIGN KEY (id_arl)
+REFERENCES arl(id);
+
+ALTER TABLE empleado
+ADD CONSTRAINT fk_id_eps_empleado
+FOREIGN KEY (id_eps)
+REFERENCES eps(id);
+
+ALTER TABLE empleado
+ADD CONSTRAINT fk_id_area_asignada_empleado
+FOREIGN KEY (id_area_asignada)
+REFERENCES area_asignada(id);
+
+ALTER TABLE empleado
+ADD CONSTRAINT fk_id_turno_empleado
+FOREIGN KEY (id_turno)
+REFERENCES turno(id);
+
+ALTER TABLE empleado
+ADD CONSTRAINT fk_id_rol_empleado
+FOREIGN KEY (id_rol)
+REFERENCES rol(id);
 
 CREATE TABLE permiso (
 	id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -181,8 +231,72 @@ CREATE TABLE permiso (
     dias TINYINT(3),
     fecha_solicitud DATE,
     id_estado_permiso TINYINT(3),
-    id_jefe_area TINYINT(3),
+    id_tipo_permiso TINYINT(3),
+    id_jefe_area INT,
     id_empleado INT,
-    id_permiso TINYINT(3),
     id_soporte INT
 );
+ALTER TABLE permiso 
+ADD CONSTRAINT fk_id_tipo_permiso
+FOREIGN KEY (id_tipo_permiso)
+REFERENCES tipo_permiso(id);
+
+ALTER TABLE permiso
+ADD CONSTRAINT fk_id_estado_permiso
+FOREIGN KEY (id_estado_permiso)
+REFERENCES estado_permiso(id);
+
+ALTER TABLE permiso 
+ADD CONSTRAINT fk_id_jefe_area
+FOREIGN KEY (id_jefe_area)
+REFERENCES jefe_area(id);
+
+ALTER TABLE permiso
+ADD CONSTRAINT fk_id_empleado
+FOREIGN KEY (id_empleado)
+REFERENCES empleado(id);
+
+ALTER TABLE permiso
+ADD CONSTRAINT fk_id_soporte
+FOREIGN KEY (id_soporte)
+REFERENCES soporte(id);
+
+CREATE TABLE comprobante(
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    id_permiso INT,
+    id_tipo_comprobante INT
+);
+
+ALTER TABLE comprobante
+ADD CONSTRAINT fk_id_permiso_comprobante
+FOREIGN KEY (id_permiso)
+REFERENCES permiso(id);
+
+ALTER TABLE comprobante
+ADD CONSTRAINT fk_id_tipo_comprobante
+FOREIGN KEY (id_tipo_comprobante)
+REFERENCES tipo_comprobante(id);
+
+CREATE TABLE asistencia(
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    fecha DATE,
+    fecha_ter DATE,
+    hora_ingreso TIME(6),
+    hora_salida TIME(6),
+    id_empleado INT
+);
+ALTER TABLE asistencia
+ADD CONSTRAINT fk_id_empleado_asistencia
+FOREIGN KEY (id_empleado)
+REFERENCES empleado(id);
+
+CREATE TABLE reporte (
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    hora_ingreso TIME(6),
+    hora_salida TIME(6),
+    id_empleado INT
+);
+ALTER TABLE reporte
+ADD CONSTRAINT fk_id_empleado_reporte
+FOREIGN KEY (id_empleado)
+REFERENCES empleado(id);
