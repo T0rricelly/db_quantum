@@ -21,7 +21,7 @@ CREATE TABLE tipo_contrato (
     tipo_contrato VARCHAR(50)
 );
 CREATE TABLE estado_contrato(
-	id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+	id TINYINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     estado VARCHAR(50)
 );
 CREATE TABLE estado_permiso (
@@ -81,7 +81,7 @@ CREATE TABLE contrato (
 	fecha_inicio DATE,
     valor INT,
     id_tipo_contrato TINYINT(3),
-    id_estado_contrato INT,
+    id_estado_contrato TINYINT,
     id_horario INT
 );
 ALTER TABLE contrato 
