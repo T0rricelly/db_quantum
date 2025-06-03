@@ -170,7 +170,7 @@ CALL insertempleado(
     3
 );
 
--- permiso 
+-- permiso
 CALL insertpermiso('2025-06-10', 5, '2025-06-01', 1, 1, 1, 1, 1);
 CALL insertpermiso('2025-06-05', 2, '2025-05-30', 2, 2, 2, 2, 2);
 
