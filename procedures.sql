@@ -553,567 +553,533 @@ BEGIN
     VALUES (hora_ingreso, hora_salida, id_jornada);
 
 END$$
+DELIMITER ;
 
-				/*UPDATES*/
+
+/*====================================== UPDATES ====================================*/
                 
-DELIMITER ;
+                
+/* updatearea_asig */
 
-USE `quantum`;
-DROP procedure IF EXISTS `updatearea_asig`;
-
+DROP PROCEDURE IF EXISTS `updatearea_asig`;
 DELIMITER $$
-USE `quantum`$$
-CREATE PROCEDURE `updatearea_asig` (
-
-	IN id tinyint(3),
-    IN nombre varchar(50)
-    
+CREATE PROCEDURE `updatearea_asig`(
+	IN p_id TINYINT(3),
+	IN p_nombre VARCHAR(50)
 )
 BEGIN
-	UPDATE area_asignada SET nombre=nombre WHERE id=id;
+	UPDATE area_asignada 
+	SET nombre = p_nombre 
+	WHERE id = p_id;
 END$$
-
-DELIMITER ;
-
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updatearl`;
-;
-
-DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updatearl`(
-
-	IN id tinyint(3),
-    IN nombre varchar(50)
-    
-)
-BEGIN
-	UPDATE arl SET nombre=nombre WHERE id=id;
-END$$
-
-
-DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updateasistencia`(
-
-	IN id int(11),
-    IN fecha date,
-    IN hora_ingreso time(6), 
-	IN hora_salida time(6), 
-	IN id_empleado int(11)
-)
-BEGIN
-	UPDATE asistencia SET fecha=fecha, hora_ingreso=hora_ingreso,hora_salida=hora_salida,id_empleado=id_empleado WHERE id=id;
-END$$
-
 DELIMITER ;
 
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updatecomprobante`;
-;
+/* updatearl */
 
+DROP PROCEDURE IF EXISTS `updatearl`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updatecomprobante`(
-
-	IN id int(11),
-    IN id_permiso int(11), 
-	IN id_tipo_comprobante int(11)
+CREATE PROCEDURE `updatearl`(
+	IN p_id TINYINT(3),
+	IN p_nombre VARCHAR(50)
 )
 BEGIN
-	UPDATE comprobante SET id_permiso=id_permiso, id_tipo_comprobante=id_tipo_comprobante WHERE id=id;
+	UPDATE arl 
+	SET nombre = p_nombre 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updatecontacto_emergencia`;
-;
 
+/* updateasistencia */
+
+DROP PROCEDURE IF EXISTS `updateasistencia`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updatecontacto_emergencia`(
-
-	IN id int(11),
-    IN nombre_contacto varchar(100),
-	IN apellido_1 varchar(100), 
-	IN apellido_2 varchar(100), 
-	IN numero_celular bigint(19), 
-	IN id_tipo_parentesco tinyint(3), 
-	IN id_grupo_sanguineo tinyint(3)
+CREATE PROCEDURE `updateasistencia`(
+	IN p_id INT(11),
+	IN p_fecha DATE,
+	IN p_hora_ingreso TIME(6), 
+	IN p_hora_salida TIME(6), 
+	IN p_id_empleado INT(11)
 )
 BEGIN
-	UPDATE contacto_emergencia SET nombre_contacto=nombre_contacto, apellido_1=apellido_1,apellido_2=apellido_2, numero_celular=numero_celular, 
-    id_tipo_parentesco=id_tipo_parentesco, id_grupo_sanguineo=id_grupo_sanguineo  WHERE id=id;
+	UPDATE asistencia 
+	SET fecha = p_fecha, 
+		hora_ingreso = p_hora_ingreso,
+		hora_salida = p_hora_salida,
+		id_empleado = p_id_empleado 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updatecontrato`;
-;
 
+/* updatecomprobante */
+
+DROP PROCEDURE IF EXISTS `updatecomprobante`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updatecontrato`(
-
-	IN id int(11),
-    IN fecha_inicio date, 
-	IN valor int(11), 
-	IN id_tipo_contrato tinyint(3), 
-	IN id_estado_contrato int(11), 
-	IN id_horario int(11)
+CREATE PROCEDURE `updatecomprobante`(
+	IN p_id INT(11),
+	IN p_id_permiso INT(11), 
+	IN p_id_tipo_comprobante INT(11)
 )
 BEGIN
-	UPDATE contrato SET fecha_inicio=fecha_inicio, valor=valor,id_tipo_contrato=id_tipo_contrato, id_estado_contrato=id_estado_contrato, 
-    id_horario=id_horario  WHERE id=id;
+	UPDATE comprobante 
+	SET id_permiso = p_id_permiso, 
+		id_tipo_comprobante = p_id_tipo_comprobante 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updateempleado`;
-;
 
+/* updatecontacto_emergencia */
+
+DROP PROCEDURE IF EXISTS `updatecontacto_emergencia`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updateempleado`(
-
-	IN id int(11), 
-	IN nombre varchar(100), 
-	IN apellido_1 varchar(100), 
-	IN apellido_2 varchar(100), 
-	IN direccion varchar(100), 
-	IN numero_celular bigint(10), 
-	IN numero_documento int(11), 
-	IN id_contacto_emergencia int(11), 
-	IN id_contrato int(11), 
-	IN id_tipo_estado_civil tinyint(3), 
-	IN id_tipo_documento tinyint(3), 
-	IN id_grupo_sanguineo tinyint(3), 
-	IN id_arl tinyint(3), 
-	IN id_eps tinyint(3),
-	IN id_area_asignada tinyint(3), 
-	IN id_turno tinyint(3), 
-	IN id_rol tinyint(3)
+CREATE PROCEDURE `updatecontacto_emergencia`(
+	IN p_id INT(11),
+	IN p_nombre_contacto VARCHAR(100),
+	IN p_apellido_1 VARCHAR(100), 
+	IN p_apellido_2 VARCHAR(100), 
+	IN p_numero_celular BIGINT(19), 
+	IN p_id_tipo_parentesco TINYINT(3), 
+	IN p_id_grupo_sanguineo TINYINT(3)
 )
 BEGIN
-	UPDATE empleado SET 
-    nombre=nombre,
-    apellido_1=apellido_1,
-    apellido_2=apellido_2,
-    direccion=direccion,
-    numero_celular=numero_celular, 
-    numero_documento=numero_documento,
-    id_contacto_emergencia=id_contacto_emergencia,
-    id_contrato=id_contrato,
-    id_tipo_estado_civil=id_tipo_estado_civil,
-    id_tipo_documento=id_tipo_documento,
-    id_grupo_sanguineo=id_grupo_sanguineo,
-    id_arl=id_arl,
-    id_eps=id_eps,
-    id_area_asignada=id_area_asignada,
-    id_turno=id_turno,
-    id_rol=id_rol 
-    WHERE id=id;
+	UPDATE contacto_emergencia 
+	SET nombre_contacto = p_nombre_contacto, 
+		apellido_1 = p_apellido_1,
+		apellido_2 = p_apellido_2, 
+		numero_celular = p_numero_celular, 
+		id_tipo_parentesco = p_id_tipo_parentesco, 
+		id_grupo_sanguineo = p_id_grupo_sanguineo  
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updateeps`;
-;
 
+/* updatecontrato*/
+
+DROP PROCEDURE IF EXISTS `updatecontrato`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updateeps`(
-
-	IN id tinyint(3), 
-	IN nombre varchar(50)
+CREATE PROCEDURE `updatecontrato`(
+	IN p_id INT(11),
+	IN p_fecha_inicio DATE, 
+	IN p_valor INT(11), 
+	IN p_id_tipo_contrato TINYINT(3), 
+	IN p_id_estado_contrato INT(11), 
+	IN p_id_horario INT(11)
 )
 BEGIN
-	UPDATE eps SET nombre=nombre WHERE id=id;
+	UPDATE contrato 
+	SET fecha_inicio = p_fecha_inicio, 
+		valor = p_valor,
+		id_tipo_contrato = p_id_tipo_contrato, 
+		id_estado_contrato = p_id_estado_contrato, 
+		id_horario = p_id_horario  
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updateestado_civil`;
-;
 
+/* updateempleado*/
+
+DROP PROCEDURE IF EXISTS `updateempleado`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updateestado_civil`(
-
-	IN id tinyint(3), 
-	IN tipo varchar(30)
+CREATE PROCEDURE `updateempleado`(
+	IN p_id INT(11), 
+	IN p_nombre VARCHAR(100), 
+	IN p_apellido_1 VARCHAR(100), 
+	IN p_apellido_2 VARCHAR(100), 
+	IN p_direccion VARCHAR(100), 
+	IN p_numero_celular BIGINT(10), 
+	IN p_numero_documento INT(11), 
+	IN p_id_contacto_emergencia INT(11), 
+	IN p_id_contrato INT(11), 
+	IN p_id_tipo_estado_civil TINYINT(3), 
+	IN p_id_tipo_documento TINYINT(3), 
+	IN p_id_grupo_sanguineo TINYINT(3), 
+	IN p_id_arl TINYINT(3), 
+	IN p_id_eps TINYINT(3),
+	IN p_id_area_asignada TINYINT(3), 
+	IN p_id_turno TINYINT(3), 
+	IN p_id_rol TINYINT(3)
 )
 BEGIN
-	UPDATE estado_civil SET tipo=tipo WHERE id=id;
+	UPDATE empleado 
+	SET nombre = p_nombre,
+		apellido_1 = p_apellido_1,
+		apellido_2 = p_apellido_2,
+		direccion = p_direccion,
+		numero_celular = p_numero_celular, 
+		numero_documento = p_numero_documento,
+		id_contacto_emergencia = p_id_contacto_emergencia,
+		id_contrato = p_id_contrato,
+		id_tipo_estado_civil = p_id_tipo_estado_civil,
+		id_tipo_documento = p_id_tipo_documento,
+		id_grupo_sanguineo = p_id_grupo_sanguineo,
+		id_arl = p_id_arl,
+		id_eps = p_id_eps,
+		id_area_asignada = p_id_area_asignada,
+		id_turno = p_id_turno,
+		id_rol = p_id_rol 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updateestado_contrato`;
-;
 
+/* updateeps*/
+
+DROP PROCEDURE IF EXISTS `updateeps`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updateestado_contrato`(
-
-	IN id tinyint, 
-	IN estado varchar(30)
+CREATE PROCEDURE `updateeps`(
+	IN p_id TINYINT(3), 
+	IN p_nombre VARCHAR(50)
 )
 BEGIN
-	UPDATE estado_contrato SET estado=estado WHERE id=id;
+	UPDATE eps 
+	SET nombre = p_nombre 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updateestado_jefe`;
-;
 
+/* updateestado_civil */
+
+DROP PROCEDURE IF EXISTS `updateestado_civil`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updateestado_jefe`(
-
-	IN id tinyint, 
-	IN tipo varchar(10)
+CREATE PROCEDURE `updateestado_civil`(
+	IN p_id TINYINT(3), 
+	IN p_tipo VARCHAR(30)
 )
 BEGIN
-	UPDATE estado_jefe SET tipo=tipo WHERE id=id;
+	UPDATE estado_civil 
+	SET tipo = p_tipo 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updateestado_permiso`;
-;
 
+/* updateestado_contrato */
+
+DROP PROCEDURE IF EXISTS `updateestado_contrato`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updateestado_permiso`(
-
-	IN id tinyint, 
-	IN tipo_estado varchar(12)
+CREATE PROCEDURE `updateestado_contrato`(
+	IN p_id TINYINT, 
+	IN p_estado VARCHAR(30)
 )
 BEGIN
-	UPDATE estado_permiso SET tipo_estado=tipo_estado WHERE id=id;
+	UPDATE estado_contrato 
+	SET estado = p_estado 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
-USE `quantum`;
-DROP procedure IF EXISTS `updateestado_permiso`;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updateestado_permiso`;
-;
 
+/* updateestado_jefe */
+
+DROP PROCEDURE IF EXISTS `updateestado_jefe`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updategrupo_sanguineo`(
-
-	IN id tinyint, 
-	IN grupo_sanguineo char(3), 
-	IN id_rh tinyint(3)
+CREATE PROCEDURE `updateestado_jefe`(
+	IN p_id TINYINT, 
+	IN p_tipo VARCHAR(10)
 )
 BEGIN
-	UPDATE grupo_sanguineo SET grupo_sanguineo=grupo_sanguineo,id_rh=id_rh WHERE id=id;
+	UPDATE estado_jefe 
+	SET tipo = p_tipo 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updatehorario`;
-;
 
+/* updateestado_permiso */
+
+DROP PROCEDURE IF EXISTS `updateestado_permiso`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updatehorario`(
-
-	IN id int(11),
-	IN hora_ingreso time(6), 
-	IN hora_salida time(6)
+CREATE PROCEDURE `updateestado_permiso`(
+	IN p_id TINYINT, 
+	IN p_tipo_estado VARCHAR(12)
 )
 BEGIN
-	UPDATE horario SET hora_ingreso=hora_ingreso,hora_salida=hora_salida WHERE id=id;
+	UPDATE estado_permiso 
+	SET tipo_estado = p_tipo_estado 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updatejefe_area`;
-;
 
+/* updategrupo_sanguineo */
+
+DROP PROCEDURE IF EXISTS `updategrupo_sanguineo`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updatejefe_area`(
-
-	IN id int(11),
-	IN fecha_inicio date,
-	IN fecha_fin date,
-	IN id_estado_jefe tinyint(3), 
-	IN id_area tinyint(3)
+CREATE PROCEDURE `updategrupo_sanguineo`(
+	IN p_id TINYINT, 
+	IN p_grupo_sanguineo CHAR(3), 
+	IN p_id_rh TINYINT(3)
 )
 BEGIN
-	UPDATE jefe_area SET fecha_inicio=fecha_inicio,fecha_fin=fecha_fin,id_estado_jefe=id_estado_jefe,id_area=id_area WHERE id=id;
+	UPDATE grupo_sanguineo 
+	SET grupo_sanguineo = p_grupo_sanguineo,
+		id_rh = p_id_rh 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updatejornada`;
-;
 
+/* updatehorario */
+
+DROP PROCEDURE IF EXISTS `updatehorario`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updatejornada`(
-
-	IN id tinyint(3),
-	IN tipo_jornada varchar(255)
+CREATE PROCEDURE `updatehorario`(
+	IN p_id INT(11),
+	IN p_hora_ingreso TIME(6), 
+	IN p_hora_salida TIME(6)
 )
 BEGIN
-	UPDATE jornada SET tipo_jornada=tipo_jornada WHERE id=id;
+	UPDATE horario 
+	SET hora_ingreso = p_hora_ingreso,
+		hora_salida = p_hora_salida 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updateparentesco`;
-;
 
+/* updatejefe_area */
+
+DROP PROCEDURE IF EXISTS `updatejefe_area`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updateparentesco`(
-
-	IN id tinyint(3),
-	IN tipo_estado varchar(30)
+CREATE PROCEDURE `updatejefe_area`(
+	IN p_id INT(11),
+	IN p_fecha_inicio DATE,
+	IN p_fecha_fin DATE,
+	IN p_id_estado_jefe TINYINT(3), 
+	IN p_id_area TINYINT(3)
 )
 BEGIN
-	UPDATE parentesco SET tipo_estado=tipo_estado WHERE id=id;
+	UPDATE jefe_area 
+	SET fecha_inicio = p_fecha_inicio,
+		fecha_fin = p_fecha_fin,
+		id_estado_jefe = p_id_estado_jefe,
+		id_area = p_id_area 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
-USE `quantum`;
-DROP procedure IF EXISTS `updateparentesco`;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updateparentesco`;
-;
 
+/* updatejornada */
+
+DROP PROCEDURE IF EXISTS `updatejornada`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updatepermiso`(
-
-	IN id int(11),
-	IN fecha date, 
-	IN dias tinyint(3), 
-	IN fecha_solicitud date, 
-	IN id_estado_permiso tinyint(3), 
-	IN id_tipo_permiso tinyint(3), 
-	IN id_jefe_area int(11), 
-	IN id_empleado int(11), 
-	IN id_soporte int(11)
+CREATE PROCEDURE `updatejornada`(
+	IN p_id TINYINT(3),
+	IN p_tipo_jornada VARCHAR(255)
 )
 BEGIN
-	UPDATE permiso SET 
-    fecha=fecha,
-    dias=dias,
-    fecha_solicitud=fecha_solicitud,
-    id_estado_permiso=id_estado_permiso,
-    id_tipo_permiso=id_tipo_permiso,
-    id_jefe_area=id_jefe_area,
-    id_empleado=id_empleado,
-    id_soporte=id_soporte
-    WHERE id=id;
+	UPDATE jornada 
+	SET tipo_jornada = p_tipo_jornada 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updatereporte`;
-;
 
+/* updateparentesco */
+
+DROP PROCEDURE IF EXISTS `updateparentesco`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updatereporte`(
-
-	IN id int(11),
-	IN hora_ingreso time(6), 
-	IN hora_salida time(6), 
-	IN id_empleado int(11)
+CREATE PROCEDURE `updateparentesco`(
+	IN p_id TINYINT(3),
+	IN p_tipo_estado VARCHAR(30)
 )
 BEGIN
-	UPDATE reporte SET hora_ingreso=hora_ingreso,hora_salida=hora_salida,id_empleado=id_empleado WHERE id=id;
+	UPDATE parentesco 
+	SET tipo_estado = p_tipo_estado 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updaterh`;
-;
 
+/* updatepermiso */
+
+DROP PROCEDURE IF EXISTS `updatepermiso`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updaterh`(
-
-	IN id tinyint(3),
-	IN rh varchar(10)
+CREATE PROCEDURE `updatepermiso`(
+	IN p_id INT(11),
+	IN p_fecha DATE, 
+	IN p_dias TINYINT(3), 
+	IN p_fecha_solicitud DATE, 
+	IN p_id_estado_permiso TINYINT(3), 
+	IN p_id_tipo_permiso TINYINT(3), 
+	IN p_id_jefe_area INT(11), 
+	IN p_id_empleado INT(11), 
+	IN p_id_soporte INT(11)
 )
 BEGIN
-	UPDATE rh SET rh=rh WHERE id=id;
+	UPDATE permiso 
+	SET fecha = p_fecha,
+		dias = p_dias,
+		fecha_solicitud = p_fecha_solicitud,
+		id_estado_permiso = p_id_estado_permiso,
+		id_tipo_permiso = p_id_tipo_permiso,
+		id_jefe_area = p_id_jefe_area,
+		id_empleado = p_id_empleado,
+		id_soporte = p_id_soporte
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updaterol`;
-;
 
+/* updatereporte */
+
+DROP PROCEDURE IF EXISTS `updatereporte`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updaterol`(
-
-	IN id tinyint(3),
-	IN nombre varchar(50)
+CREATE PROCEDURE `updatereporte`(
+	IN p_id INT(11),
+	IN p_hora_ingreso TIME(6), 
+	IN p_hora_salida TIME(6), 
+	IN p_id_empleado INT(11)
 )
 BEGIN
-	UPDATE rol SET nombre=nombre WHERE id=id;
+	UPDATE reporte 
+	SET hora_ingreso = p_hora_ingreso,
+		hora_salida = p_hora_salida,
+		id_empleado = p_id_empleado 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updatesoporte`;
-;
 
+/* updaterh */
+
+DROP PROCEDURE IF EXISTS `updaterh`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updatesoporte`(
-
-	IN id int(11), 
-	IN nombre varchar(100), 
-	IN url varchar(255)
+CREATE PROCEDURE `updaterh`(
+	IN p_id TINYINT(3),
+	IN p_rh VARCHAR(10)
 )
 BEGIN
-	UPDATE soporte SET nombre=nombre,url=url WHERE id=id;
+	UPDATE rh 
+	SET rh = p_rh 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updatetipo_comprobante`;
-;
 
+/* updaterol */
+
+DROP PROCEDURE IF EXISTS `updaterol`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updatetipo_comprobante`(
-
-	IN id int(11),
-	IN tipo_comprobante varchar(100)
+CREATE PROCEDURE `updaterol`(
+	IN p_id TINYINT(3),
+	IN p_nombre VARCHAR(50)
 )
 BEGIN
-	UPDATE tipo_comprobante SET tipo_comprobante=tipo_comprobante WHERE id=id;
+	UPDATE rol 
+	SET nombre = p_nombre 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updatetipo_contrato`;
-;
 
+/* updatesoporte */
+
+DROP PROCEDURE IF EXISTS `updatesoporte`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updatetipo_contrato`(
-
-	IN id tinyint(3),
-	IN tipo_contrato varchar(50)
+CREATE PROCEDURE `updatesoporte`(
+	IN p_id INT(11), 
+	IN p_nombre VARCHAR(100), 
+	IN p_url VARCHAR(255)
 )
 BEGIN
-	UPDATE tipo_contrato SET tipo_contrato=tipo_contrato WHERE id=id;
+	UPDATE soporte 
+	SET nombre = p_nombre,
+		url = p_url 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updatetipo_documento`;
-;
 
+/* updatetipo_comprobante */
+
+DROP PROCEDURE IF EXISTS `updatetipo_comprobante`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updatetipo_documento`(
-
-	IN id tinyint(3),
-	IN tipo_documento varchar(100)
+CREATE PROCEDURE `updatetipo_comprobante`(
+	IN p_id INT(11),
+	IN p_tipo_comprobante VARCHAR(100)
 )
 BEGIN
-	UPDATE tipo_documento SET tipo_documento=tipo_documento WHERE id=id;
+	UPDATE tipo_comprobante 
+	SET tipo_comprobante = p_tipo_comprobante 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
-USE `quantum`;
-DROP procedure IF EXISTS `updatetipo_permiso`;
 
-;
 
+/* updatetipo_contrato */
+
+DROP PROCEDURE IF EXISTS `updatetipo_contrato`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updatetipo_permiso`(
-
-	IN id tinyint(3),
-	IN tipo_permiso varchar(50)
+CREATE PROCEDURE `updatetipo_contrato`(
+	IN p_id TINYINT(3),
+	IN p_tipo_contrato VARCHAR(50)
 )
 BEGIN
-	UPDATE tipo_permiso SET tipo_permiso=tipo_permiso WHERE id=id;
+	UPDATE tipo_contrato 
+	SET tipo_contrato = p_tipo_contrato 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
 
-USE `quantum`;
-DROP procedure IF EXISTS `quantum`.`updateturno`;
-;
 
+/* updatetipo_documento */
+
+DROP PROCEDURE IF EXISTS `updatetipo_documento`;
 DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updateturno`(
-
-	IN id tinyint(3),
-	IN hora_ingreso time(6), 
-	IN hora_salida time(6), 
-	IN id_jornada tinyint(3)
+CREATE PROCEDURE `updatetipo_documento`(
+	IN p_id TINYINT(3),
+	IN p_tipo_documento VARCHAR(100)
 )
 BEGIN
-	UPDATE turno SET hora_ingreso=hora_ingreso,hora_salida=hora_salida, id_jornada=id_jornada WHERE id=id;
+	UPDATE tipo_documento 
+	SET tipo_documento = p_tipo_documento 
+	WHERE id = p_id;
 END$$
-
 DELIMITER ;
-;
+
+
+/* updatetipo_permiso */
+
+DROP PROCEDURE IF EXISTS `updatetipo_permiso`;
+DELIMITER $$
+CREATE PROCEDURE `updatetipo_permiso`(
+	IN p_id TINYINT(3),
+	IN p_tipo_permiso VARCHAR(50)
+)
+BEGIN
+	UPDATE tipo_permiso 
+	SET tipo_permiso = p_tipo_permiso 
+	WHERE id = p_id;
+END$$
+DELIMITER ;
+
+
+/* updateturno */
+
+DROP PROCEDURE IF EXISTS `updateturno`;
+DELIMITER $$
+CREATE PROCEDURE `updateturno`(
+	IN p_id TINYINT(3),
+	IN p_hora_ingreso TIME(6), 
+	IN p_hora_salida TIME(6), 
+	IN p_id_jornada TINYINT(3)
+)
+BEGIN
+	UPDATE turno 
+	SET hora_ingreso = p_hora_ingreso,
+		hora_salida = p_hora_salida,
+		id_jornada = p_id_jornada 
+	WHERE id = p_id;
+END$$
+DELIMITER ;
+
 
 
 
