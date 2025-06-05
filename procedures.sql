@@ -43,17 +43,14 @@ DROP procedure IF EXISTS `insertasistencia`;
 DELIMITER $$
 USE `quantum`$$
 CREATE PROCEDURE `insertasistencia`(
-
-    IN f DATE,
-    IN h_in TIME(6),
-    IN h_sal TIME(6),
+    
     IN f_emp INT(11)
     
 )
 BEGIN
 
 	INSERT INTO asistencia(fecha, hora_ingreso, hora_salida, id_empleado)
-	VALUES (f, h_in, h_sal, f_emp);
+	VALUES (now(), now(), now(), f_emp);
     
 END$$
 

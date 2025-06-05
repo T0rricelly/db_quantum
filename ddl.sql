@@ -124,6 +124,7 @@ CREATE TABLE jefe_area (
 	id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     fecha_inicio DATE,
     fecha_fin DATE,
+    id_empleado
     id_estado_jefe TINYINT(3),
     id_area TINYINT(3)
 );

@@ -129,8 +129,7 @@ CALL insertjefe_area('2024-08-01', NULL, 1, 2);
 
 -- contacto_emergencia 
 CALL insertcontacto_emergencia('Juan', 'Lotero', 'Moreno', 3112345678, 1, 1);
-CALL insertcontacto_emergencia('María', 'García', 'Rodríguez', 3108765432, 2, 2);
-
+CALL insertcontacto_emergencia('Juan', 'Loteroooo', 'Moreno', 3112345677, 1, 1);
 -- empleado 
 CALL insertempleado(
     'Kevin',
@@ -139,6 +138,24 @@ CALL insertempleado(
     'Calle 123 #45-67, Pereira',
     3112345678,
     12345678,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2
+);
+CALL insertempleado(
+    'Kevin',
+    'Lotero',
+    'Moreno',
+    'Calle 123 #45-68, Pereira',
+    3112345679,
+    12345668,
     1,
     1,
     1,
@@ -179,8 +196,8 @@ CALL insertcomprobante(1, 1);
 CALL insertcomprobante(2, 2);
 
 -- asistencia 
-CALL insertasistencia('2025-06-02', '08:00:00', '17:00:00', 1);
-CALL insertasistencia('2025-06-02', '09:00:00', '18:00:00', 2);
+CALL insertasistencia( 1);
+CALL insertasistencia( 2);
 
 -- reporte 
 CALL insertreporte('08:00:00', '17:00:00', 1);
