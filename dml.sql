@@ -36,6 +36,7 @@ CALL insertestado_permiso('Pendiente');
 CALL insertestado_permiso('Aprobado');
 CALL insertestado_permiso('Rechazado');
 CALL insertestado_permiso('Cancelado');
+CALL insertestado_permiso('Devuelto');
 
 -- estado_jefe
 CALL insertestado_jefe('Activo');
