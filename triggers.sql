@@ -78,11 +78,11 @@ DROP TRIGGER IF EXISTS `quantum`.`estado_jefe_BEFORE_INSERT`;
 
 DELIMITER $$
 USE `quantum`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `quantum`.`estado_jefe_BEFORE_INSERT` BEFORE INSERT ON `estado_jefe` FOR EACH ROW
+CREATE DEFINER = CURRENT_USER TRIGGER `quantum`.`estado_jefe_BEFORE_INSERT` BEFORE INSERT ON `estado_rol` FOR EACH ROW
 BEGIN
-IF EXISTS (SELECT * FROM estado_jefe WHERE tipo = NEW.tipo) THEN
+IF EXISTS (SELECT * FROM estado_rol WHERE tipo = NEW.tipo) THEN
  SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El tipo de estado de jefe ya existe en la base de datos.';
+        SET MESSAGE_TEXT = 'El tipo de estado del rol ya existe en la base de datos.';
     END IF;
 END$$
 DELIMITER ;

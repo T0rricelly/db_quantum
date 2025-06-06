@@ -1,6 +1,4 @@
-USE `quantum`;
-DROP procedure IF EXISTS `insertArea_asig`;
-
+/*INSERT*/ 
 USE `quantum`;
 DROP procedure IF EXISTS `quantum`.`insertArea_asig`;
 ;
@@ -44,13 +42,13 @@ DELIMITER $$
 USE `quantum`$$
 CREATE PROCEDURE `insertasistencia`(
     
-    IN f_emp INT(11)
+    IN f_USU INT(11)
     
 )
 BEGIN
 
-	INSERT INTO asistencia(fecha, hora_ingreso, hora_salida, id_empleado)
-	VALUES (now(), now(), now(), f_emp);
+	INSERT INTO asistencia(fecha, hora_ingreso, hora_salida, id_usuario)
+	VALUES (now(), now(), now(), f_USU);
     
 END$$
 
@@ -123,11 +121,11 @@ END$$
 DELIMITER ;
 
 USE `quantum`;
-DROP procedure IF EXISTS `insertempleado`;
+DROP procedure IF EXISTS `insertusuario`;
 
 DELIMITER $$
 USE `quantum`$$
-CREATE PROCEDURE `insertempleado`(
+CREATE PROCEDURE `insertusuario`(
 
 	IN nombre varchar(100), 
 	IN apellido_1 varchar(100), 
@@ -135,6 +133,7 @@ CREATE PROCEDURE `insertempleado`(
 	IN direccion varchar(100), 
 	IN numero_celular bigint(10), 
 	IN numero_documento int(11), 
+    IN pas varchar(500),
 	IN id_contacto_emergencia int(11), 
 	IN id_contrato int(11), 
 	IN id_tipo_estado_civil tinyint(3), 
@@ -142,19 +141,39 @@ CREATE PROCEDURE `insertempleado`(
 	IN id_grupo_sanguineo tinyint(3), 
 	IN id_arl tinyint(3),
 	IN id_eps tinyint(3),
-	IN id_area_asignada tinyint(3), 
-	IN id_turno tinyint(3), 
-	IN id_rol tinyint(3)
+	IN id_turno tinyint(3)
     
 )
 BEGIN
 
-	INSERT INTO empleado (nombre, apellido_1, apellido_2, direccion, numero_celular, numero_documento, id_contacto_emergencia, id_contrato, id_tipo_estado_civil, id_tipo_documento, id_grupo_sanguineo, id_arl, id_eps, id_area_asignada, id_turno, id_rol)
-    VALUES (nombre, apellido_1, apellido_2, direccion, numero_celular, numero_documento, id_contacto_emergencia, id_contrato, id_tipo_estado_civil, id_tipo_documento, id_grupo_sanguineo, id_arl, id_eps, id_area_asignada, id_turno, id_rol);
+	INSERT INTO usuario (nombre, apellido_1, apellido_2, direccion, numero_celular, numero_documento,contrasena, id_contacto_emergencia, id_contrato, id_tipo_estado_civil, id_tipo_documento, id_grupo_sanguineo, id_arl, id_eps, id_turno)
+    VALUES (nombre, apellido_1, apellido_2, direccion, numero_celular, numero_documento,AES_ENCRYPT(pas,'123'), id_contacto_emergencia, id_contrato, id_tipo_estado_civil, id_tipo_documento, id_grupo_sanguineo, id_arl, id_eps, id_turno);
 
 END$$
 
 DELIMITER ;
+
+USE `quantum`;
+DROP procedure IF EXISTS `insertusuario_permiso`;
+
+DELIMITER $$
+USE `quantum`$$
+CREATE PROCEDURE `insertusuario_permiso` (
+
+	IN trazabilidad varchar(300),
+	IN fecha date, 
+	IN id_usuario int(11),
+	IN id_permiso int(11)
+    
+)
+BEGIN
+	INSERT INTO usuario_permiso (trazabilidad, fecha, id_usuario, id_permiso)
+    VALUES (trazabilidad, fecha, id_usuario, id_permiso);
+END$$
+
+DELIMITER ;
+
+
 
 USE `quantum`;
 DROP procedure IF EXISTS `inserteps`;
@@ -214,18 +233,18 @@ END$$
 DELIMITER ;
 
 USE `quantum`;
-DROP procedure IF EXISTS `insertestado_jefe`;
+DROP procedure IF EXISTS `insertestado_rol`;
 
 DELIMITER $$
 USE `quantum`$$
-CREATE PROCEDURE `insertestado_jefe`(
+CREATE PROCEDURE `insertestado_rol`(
 
 	IN tipo varchar(10)
 
 )
 BEGIN
 
-	INSERT INTO estado_jefe (tipo)
+	INSERT INTO estado_rol (tipo)
     VALUES (tipo);
 
 END$$
@@ -292,22 +311,22 @@ END$$
 DELIMITER ;
 
 USE `quantum`;
-DROP procedure IF EXISTS `insertjefe_area`;
+DROP procedure IF EXISTS `insertrol_usuario`;
 
 DELIMITER $$
 USE `quantum`$$
-CREATE PROCEDURE `insertjefe_area`(
+CREATE PROCEDURE `insertrol_usuario`(
 
 	IN fecha_inicio date,
 	IN fecha_fin date, 
-	IN id_estado_jefe tinyint(3), 
+	IN id_estado_rol tinyint(3), 
 	IN id_area tinyint(3)
 
 )
 BEGIN
 
-	INSERT INTO jefe_area (fecha_inicio, fecha_fin, id_estado_jefe, id_area)
-    VALUES (fecha_inicio, fecha_fin, id_estado_jefe, id_area);
+	INSERT INTO rol_usuario (fecha_inicio, fecha_fin, id_estado_rol, id_area)
+    VALUES (fecha_inicio, fecha_fin, id_estado_rol, id_area);
 
 END$$
 
@@ -363,15 +382,13 @@ CREATE PROCEDURE `insertpermiso`(
 	IN fecha_solicitud date, 
 	IN id_estado_permiso tinyint(3), 
 	IN id_tipo_permiso tinyint(3), 
-	IN id_jefe_area int(11), 
-	IN id_empleado int(11), 
 	IN id_soporte int(11)
 
 )
 BEGIN
 
-	INSERT INTO permiso (fecha, dias, fecha_solicitud, id_estado_permiso, id_tipo_permiso, id_jefe_area, id_empleado, id_soporte)
-    VALUES (fecha, dias, fecha_solicitud, id_estado_permiso, id_tipo_permiso, id_jefe_area, id_empleado, id_soporte);
+	INSERT INTO permiso (fecha, dias, fecha_solicitud, id_estado_permiso, id_tipo_permiso, id_soporte)
+    VALUES (fecha, dias, fecha_solicitud, id_estado_permiso, id_tipo_permiso, id_soporte);
 
 END$$
 
@@ -386,13 +403,13 @@ CREATE PROCEDURE `insertreporte`(
 
 	IN hora_ingreso time(6), 
 	IN hora_salida time(6), 
-	IN id_empleado int(11)
+	IN id_usuario int(11)
 
 )
 BEGIN
 
-	INSERT INTO reporte (hora_ingreso, hora_salida, id_empleado)
-    VALUES (hora_ingreso, hora_salida, id_empleado);
+	INSERT INTO reporte (hora_ingreso, hora_salida, id_usuario)
+    VALUES (hora_ingreso, hora_salida, id_usuario);
 
 END$$
 
@@ -597,14 +614,14 @@ CREATE PROCEDURE `updateasistencia`(
 	IN p_fecha DATE,
 	IN p_hora_ingreso TIME(6), 
 	IN p_hora_salida TIME(6), 
-	IN p_id_empleado INT(11)
+	IN p_id_usuario INT(11)
 )
 BEGIN
 	UPDATE asistencia 
 	SET fecha = p_fecha, 
 		hora_ingreso = p_hora_ingreso,
 		hora_salida = p_hora_salida,
-		id_empleado = p_id_empleado 
+		id_usuario = p_id_usuario 
 	WHERE id = p_id;
 END$$
 DELIMITER ;
@@ -678,11 +695,11 @@ END$$
 DELIMITER ;
 
 
-/* updateempleado*/
+/* updateusuario*/
 
-DROP PROCEDURE IF EXISTS `updateempleado`;
+DROP PROCEDURE IF EXISTS `updateusuario`;
 DELIMITER $$
-CREATE PROCEDURE `updateempleado`(
+CREATE PROCEDURE `updateusuario`(
 	IN p_id INT(11), 
 	IN p_nombre VARCHAR(100), 
 	IN p_apellido_1 VARCHAR(100), 
@@ -690,6 +707,7 @@ CREATE PROCEDURE `updateempleado`(
 	IN p_direccion VARCHAR(100), 
 	IN p_numero_celular BIGINT(10), 
 	IN p_numero_documento INT(11), 
+    IN p_contrasena varchar(500),
 	IN p_id_contacto_emergencia INT(11), 
 	IN p_id_contrato INT(11), 
 	IN p_id_tipo_estado_civil TINYINT(3), 
@@ -697,18 +715,17 @@ CREATE PROCEDURE `updateempleado`(
 	IN p_id_grupo_sanguineo TINYINT(3), 
 	IN p_id_arl TINYINT(3), 
 	IN p_id_eps TINYINT(3),
-	IN p_id_area_asignada TINYINT(3), 
-	IN p_id_turno TINYINT(3), 
-	IN p_id_rol TINYINT(3)
+	IN p_id_turno TINYINT(3)
 )
 BEGIN
-	UPDATE empleado 
+	UPDATE usuario 
 	SET nombre = p_nombre,
 		apellido_1 = p_apellido_1,
 		apellido_2 = p_apellido_2,
 		direccion = p_direccion,
 		numero_celular = p_numero_celular, 
 		numero_documento = p_numero_documento,
+        contrasena=p_contrasena,
 		id_contacto_emergencia = p_id_contacto_emergencia,
 		id_contrato = p_id_contrato,
 		id_tipo_estado_civil = p_id_tipo_estado_civil,
@@ -716,9 +733,7 @@ BEGIN
 		id_grupo_sanguineo = p_id_grupo_sanguineo,
 		id_arl = p_id_arl,
 		id_eps = p_id_eps,
-		id_area_asignada = p_id_area_asignada,
-		id_turno = p_id_turno,
-		id_rol = p_id_rol 
+		id_turno = p_id_turno
 	WHERE id = p_id;
 END$$
 DELIMITER ;
@@ -772,16 +787,16 @@ END$$
 DELIMITER ;
 
 
-/* updateestado_jefe */
+/* updateestado_rol_usuario */
 
-DROP PROCEDURE IF EXISTS `updateestado_jefe`;
+DROP PROCEDURE IF EXISTS `updateestado_rol_usuario`;
 DELIMITER $$
-CREATE PROCEDURE `updateestado_jefe`(
+CREATE PROCEDURE `updateestado_rol_usuario`(
 	IN p_id TINYINT, 
 	IN p_tipo VARCHAR(10)
 )
 BEGIN
-	UPDATE estado_jefe 
+	UPDATE estado_rol_usuario 
 	SET tipo = p_tipo 
 	WHERE id = p_id;
 END$$
@@ -840,24 +855,25 @@ END$$
 DELIMITER ;
 
 
-/* updatejefe_area */
+/* updaterol_usuario_area */
 
-DROP PROCEDURE IF EXISTS `updatejefe_area`;
+DROP PROCEDURE IF EXISTS `updaterol_usuario_area`;
 DELIMITER $$
-CREATE PROCEDURE `updatejefe_area`(
-	IN p_id INT(11),
+CREATE PROCEDURE `updaterol_usuario`(
+	IN p_id_rol INT(11),
+    IN p_id_usuario int(11),
 	IN p_fecha_inicio DATE,
 	IN p_fecha_fin DATE,
-	IN p_id_estado_jefe TINYINT(3), 
+	IN p_id_estado_rol TINYINT(3), 
 	IN p_id_area TINYINT(3)
 )
 BEGIN
-	UPDATE jefe_area 
+	UPDATE rol_usuario_area 
 	SET fecha_inicio = p_fecha_inicio,
 		fecha_fin = p_fecha_fin,
-		id_estado_jefe = p_id_estado_jefe,
+		id_estado_rol = p_id_estado_rol,
 		id_area = p_id_area 
-	WHERE id = p_id;
+	WHERE id_rol = p_id_rol and id_usuario = p_id_usuario;
 END$$
 DELIMITER ;
 
@@ -905,8 +921,6 @@ CREATE PROCEDURE `updatepermiso`(
 	IN p_fecha_solicitud DATE, 
 	IN p_id_estado_permiso TINYINT(3), 
 	IN p_id_tipo_permiso TINYINT(3), 
-	IN p_id_jefe_area INT(11), 
-	IN p_id_empleado INT(11), 
 	IN p_id_soporte INT(11)
 )
 BEGIN
@@ -916,8 +930,6 @@ BEGIN
 		fecha_solicitud = p_fecha_solicitud,
 		id_estado_permiso = p_id_estado_permiso,
 		id_tipo_permiso = p_id_tipo_permiso,
-		id_jefe_area = p_id_jefe_area,
-		id_empleado = p_id_empleado,
 		id_soporte = p_id_soporte
 	WHERE id = p_id;
 END$$
@@ -932,13 +944,13 @@ CREATE PROCEDURE `updatereporte`(
 	IN p_id INT(11),
 	IN p_hora_ingreso TIME(6), 
 	IN p_hora_salida TIME(6), 
-	IN p_id_empleado INT(11)
+	IN p_id_usuario INT(11)
 )
 BEGIN
 	UPDATE reporte 
 	SET hora_ingreso = p_hora_ingreso,
 		hora_salida = p_hora_salida,
-		id_empleado = p_id_empleado 
+		id_usuario = p_id_usuario 
 	WHERE id = p_id;
 END$$
 DELIMITER ;
@@ -1077,6 +1089,32 @@ BEGIN
 END$$
 DELIMITER ;
 
+
+/*updateusuario_permiso*/
+
+USE `quantum`;
+DROP procedure IF EXISTS `updateusuario_permiso`;
+
+DELIMITER $$
+USE `quantum`$$
+CREATE PROCEDURE `updateusuario_permiso` (
+	IN p_id int,
+	IN p_trazabilidad varchar(300),
+	IN p_fecha date, 
+	IN p_id_usuario int(11),
+	IN p_id_permiso int(11)
+    
+)
+BEGIN
+	UPDATE usuario_permiso
+    SET trazabilidad=p_trazabilidad, 
+		fecha=p_fecha,
+		id_usuario=p_id_usuario,
+        id_permiso=p_id_permiso
+	WHERE id = p_id;
+END$$
+
+DELIMITER ;
 
 
 
