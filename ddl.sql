@@ -73,7 +73,7 @@ CREATE TABLE horario (
 );
 CREATE TABLE parentesco (
 	id TINYINT(3) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    tipo_estado VARCHAR(30)
+    tipo_parentesco VARCHAR(30)
 );
 -- Tablas Debiles
 CREATE TABLE usuario (

@@ -122,14 +122,11 @@ CALL insertgrupo_sanguineo('O', 1);
 CALL insertgrupo_sanguineo('B', 2);
 CALL insertgrupo_sanguineo('AB', 2);
 
--- rol_usuario
-CALL insertrol_usuario('2024-07-01', '2025-07-01', 1, 1);
-CALL insertrol_usuario('2024-08-01', NULL, 1, 2);
 
 -- contacto_emergencia 
 CALL insertcontacto_emergencia('Juan', 'Lotero', 'Moreno', 3112345678, 1, 1);
 CALL insertcontacto_emergencia('Juan', 'Loteroooo', 'Moreno', 3112345677, 1, 1);
--- empleado 
+-- usuario 
 CALL insertusuario(
     'Kevin',
     'Lotero',
@@ -138,7 +135,7 @@ CALL insertusuario(
     3112345678,
     12345678,
     "",
-    1,
+    2,
     1,
     1,
     1,
@@ -148,12 +145,12 @@ CALL insertusuario(
     1
 );
 CALL insertusuario(
-    'Kevin',
-    'Lotero',
-    'Moreno',
-    'Calle 123 #45-68, Pereira',
-    3112345679,
-    12345668,
+    'Daniel',
+    'Mendez',
+    'Fontecha',
+    'Calle 83 #80-72, Bogota',
+    3077845979,
+    1764538,
     "",
     1,
     1,
@@ -184,8 +181,8 @@ CALL insertusuario(
 );
 
 -- permiso
-CALL insertpermiso('2025-06-10', 5, '2025-06-01', 1, 1, 1, 1, 1);
-CALL insertpermiso('2025-06-05', 2, '2025-05-30', 2, 2, 2, 2, 2);
+CALL insertpermiso('2025-06-10', 5, '2025-06-01', 1, 1,2);
+CALL insertpermiso('2025-06-05', 2, '2025-05-30', 2, 2,2);
 
 -- comprobante 
 CALL insertcomprobante(1, 1);
@@ -194,7 +191,13 @@ CALL insertcomprobante(2, 2);
 -- asistencia 
 CALL insertasistencia( 1);
 CALL insertasistencia( 2);
-
+-- rol_usuario
+CALL insertrol_usuario(1,2,'2024-07-01', '2025-07-01', 1, 1);
+CALL insertrol_usuario(2,1,'2024-08-01', NULL, 1, 2);
 -- reporte 
 CALL insertreporte('08:00:00', '17:00:00', 1);
 CALL insertreporte('09:00:00', '18:00:00', 2);
+
+-- insertusuario_permiso
+CALL insertusuario_permiso("",2,2);
+CALL insertusuario_permiso("",1,1);

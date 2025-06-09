@@ -161,14 +161,13 @@ USE `quantum`$$
 CREATE PROCEDURE `insertusuario_permiso` (
 
 	IN trazabilidad varchar(300),
-	IN fecha date, 
 	IN id_usuario int(11),
 	IN id_permiso int(11)
     
 )
 BEGIN
 	INSERT INTO usuario_permiso (trazabilidad, fecha, id_usuario, id_permiso)
-    VALUES (trazabilidad, fecha, id_usuario, id_permiso);
+    VALUES (trazabilidad, now(), id_usuario, id_permiso);
 END$$
 
 DELIMITER ;
@@ -316,7 +315,8 @@ DROP procedure IF EXISTS `insertrol_usuario`;
 DELIMITER $$
 USE `quantum`$$
 CREATE PROCEDURE `insertrol_usuario`(
-
+	IN id_rol tinyint(3),
+	IN id_usuario int(11),
 	IN fecha_inicio date,
 	IN fecha_fin date, 
 	IN id_estado_rol tinyint(3), 
@@ -325,8 +325,8 @@ CREATE PROCEDURE `insertrol_usuario`(
 )
 BEGIN
 
-	INSERT INTO rol_usuario (fecha_inicio, fecha_fin, id_estado_rol, id_area)
-    VALUES (fecha_inicio, fecha_fin, id_estado_rol, id_area);
+	INSERT INTO rol_usuario
+    VALUES (id_rol,id_usuario,fecha_inicio, fecha_fin, id_estado_rol, id_area);
 
 END$$
 
@@ -358,13 +358,13 @@ DELIMITER $$
 USE `quantum`$$
 CREATE PROCEDURE `insertparentesco`(
 
-	IN tipo_estado varchar(30)
+	IN tipo_parentesco varchar(30)
 
 )
 BEGIN
 
-	INSERT INTO parentesco (tipo_estado)
-    VALUES (tipo_estado);
+	INSERT INTO parentesco (tipo_parentesco)
+    VALUES (tipo_parentesco);
 
 END$$
 
@@ -900,11 +900,11 @@ DROP PROCEDURE IF EXISTS `updateparentesco`;
 DELIMITER $$
 CREATE PROCEDURE `updateparentesco`(
 	IN p_id TINYINT(3),
-	IN p_tipo_estado VARCHAR(30)
+	IN p_tipo_parentesco VARCHAR(30)
 )
 BEGIN
 	UPDATE parentesco 
-	SET tipo_estado = p_tipo_estado 
+	SET tipo_parentesco = p_tipo_parentesco
 	WHERE id = p_id;
 END$$
 DELIMITER ;
