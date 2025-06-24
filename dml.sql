@@ -2,6 +2,11 @@ USE `quantum`;
 
 -- tablas fuertes
 
+-- tipo_soporte
+CALL inserttipo_soporte('Permiso Especial');
+CALL inserttipo_soporte('Certificado Médico');
+CALL inserttipo_soporte('Justificante Estudio');
+
 -- tipo_documento
 CALL inserttipo_documento('Cédula de Ciudadanía');
 CALL inserttipo_documento('Cédula de Extranjería');
@@ -89,9 +94,9 @@ CALL inserteps('Compensar');
 CALL inserteps('Coomeva');
 
 -- soporte 
-CALL insertsoporte('Certificado Médico', 'http://www.minsalud.gov.co/certificado_medico.pdf');
-CALL insertsoporte('Justificante Estudio', 'http://www.mineducacion.gov.co/justificante_estudio.pdf');
-CALL insertsoporte('Permiso Especial', 'http://www.gov.co/permiso_especial.pdf');
+CALL insertsoporte(2,'http://www.minsalud.gov.co/certificado_medico.pdf');
+CALL insertsoporte(3,'http://www.mineducacion.gov.co/justificante_estudio.pdf');
+CALL insertsoporte(1,'http://www.gov.co/permiso_especial.pdf');
 
 -- horario 
 CALL inserthorario('08:00:00', '17:00:00');

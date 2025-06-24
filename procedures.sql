@@ -460,18 +460,34 @@ DELIMITER $$
 USE `quantum`$$
 CREATE PROCEDURE `insertsoporte`(
 
-	IN nombre varchar(100), 
+	IN id_tipo_soporte tinyint(4),
 	IN url varchar(255)
 
 )
 BEGIN
 
-	INSERT INTO soporte (nombre, url)
-    VALUES (nombre, url);
+	INSERT INTO soporte (id_tipo_soporte, url)
+    VALUES (id_tipo_soporte, url);
 
 END$$
 
 DELIMITER ;
+
+USE `quantum`;
+DROP procedure IF EXISTS `inserttipo_soporte`;
+
+DELIMITER $$
+USE `quantum`$$
+CREATE PROCEDURE `inserttipo_soporte` (
+	IN tipo_soporte VARCHAR(100)
+)
+BEGIN
+	INSERT INTO tipo_soporte (tipo_soporte)
+    VALUES (tipo_soporte);
+END$$
+
+DELIMITER ;
+
 
 USE `quantum`;
 DROP procedure IF EXISTS `inserttipo_comprobante`;
@@ -1069,6 +1085,20 @@ BEGIN
 END$$
 DELIMITER ;
 
+/* updatetipo_permiso */
+
+DROP PROCEDURE IF EXISTS `updatetipo_soporte`;
+DELIMITER $$
+CREATE PROCEDURE `updatetipo_soporte`(
+	IN p_id TINYINT(3),
+	IN p_tipo_soporte VARCHAR(50)
+)
+BEGIN
+	UPDATE tipo_soporte 
+	SET tipo_soporte = p_tipo_soporte 
+	WHERE id = p_id;
+END$$
+DELIMITER ;
 
 /* updateturno */
 

@@ -3,6 +3,11 @@ CREATE DATABASE quantum;
 USE quantum;
 
 -- Tablas fuertes
+CREATE TABLE tipo_soporte(
+	id TINYINT(3) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    tipo_soporte VARCHAR(100)
+);
+
 CREATE TABLE tipo_documento(
 	id TINYINT(3) PRIMARY KEY AUTO_INCREMENT NOT NULL,
     tipo_documento VARCHAR(100)
@@ -62,7 +67,7 @@ CREATE TABLE eps (
 );
 CREATE TABLE soporte (
 	id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    nombre VARCHAR(100),
+    id_tipo_soporte TINYINT,
     url VARCHAR(255)
 );
 
@@ -305,3 +310,8 @@ ALTER TABLE reporte
 ADD CONSTRAINT fk_id_usuario_reporte
 FOREIGN KEY (id_usuario)
 REFERENCES usuario(id);
+
+ALTER TABLE soporte
+ADD CONSTRAINT fk_id_tipo_soporte
+FOREIGN KEY (id_tipo_soporte)
+REFERENCES tipo_soporte(id);
