@@ -24,6 +24,19 @@ IF EXISTS (SELECT * FROM arl WHERE nombre = NEW.nombre) THEN
     END IF;
 DELIMITER ;
 
+/*Before Update asistencia*/
+DROP TRIGGER IF EXISTS asistencia_BEFORE_UPDATE;
+DELIMITER $$
+CREATE TRIGGER asistencia_BEFORE_UPDATE
+BEFORE UPDATE ON asistencia
+FOR EACH ROW
+BEGIN
+  IF OLD.fecha < CURDATE() THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'No se puede modificar asistencia de fechas anteriores.';
+  END IF;
+END$$
+DELIMITER ;
 /*Before Insert asistencia*/
 DROP TRIGGER IF EXISTS `quantum`.`asistencia_BEFORE_INSERT`;
 
@@ -76,7 +89,24 @@ IF EXISTS (SELECT * FROM contacto_emergencia WHERE numero_celular = NEW.numero_c
     END IF;
 DELIMITER ;
 
-/*Before Insert contrato NN*/
+/*Before Insert contrato*/
+DROP TRIGGER IF EXISTS contrato_BEFORE_INSERT;
+DELIMITER $$
+CREATE TRIGGER contrato_BEFORE_INSERT
+BEFORE INSERT ON contrato
+FOR EACH ROW
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM contrato
+    WHERE fecha_inicio = NEW.fecha_inicio
+      AND valor = NEW.valor
+      AND id_tipo_contrato = NEW.id_tipo_contrato
+  ) THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Este contrato ya existe.';
+  END IF;
+END$$
+DELIMITER ;
 
 /*Before insert Eps*/
 DROP TRIGGER IF EXISTS `quantum`.`eps_BEFORE_INSERT`;
@@ -382,7 +412,7 @@ DELIMITER ;
 /*--------------------------------------------------------------*/
 /*--------------------------------------------------------------*/
 /*--------------------------------------------------------------*/
-/*Hacer la trazabilidad con el estado*/
+/*Hacer la trazabilidad con el estado con update*/
 
 DROP TRIGGER IF EXISTS `quantum`.`permiso_AFTER_UPDATE`;
 
@@ -394,6 +424,18 @@ BEGIN
     INSERT INTO usuario_permiso(trazabilidad,fecha)
     VALUES (CONCAT("Antes:",OLD.id_estado_permiso," Ahora: ",NEW.id_estado_permiso), CURDATE());
   END IF;
+END$$
+DELIMITER ;
+
+ /*Hacer la trazabilidad con el estado con insert*/
+DROP TRIGGER IF EXISTS permiso_AFTER_INSERT;
+DELIMITER $$
+CREATE TRIGGER permiso_AFTER_INSERT
+AFTER INSERT ON permiso
+FOR EACH ROW
+BEGIN
+  INSERT INTO usuario_permiso (trazabilidad, fecha, id_usuario, id_permiso)
+  VALUES ('Permiso creado', CURDATE(), (SELECT id_usuario FROM usuario WHERE id_contrato = NEW.id_estado_permiso LIMIT 1), NEW.id);
 END$$
 DELIMITER ;
 
