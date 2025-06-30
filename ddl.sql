@@ -13,10 +13,6 @@ CREATE TABLE tipo_documento(
     tipo_documento VARCHAR(100)
 );
 
-CREATE TABLE tipo_comprobante(
-	id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    tipo_comprobante VARCHAR(100)
-);
 CREATE TABLE tipo_permiso (
 	id TINYINT(3) PRIMARY KEY NOT NULL AUTO_INCREMENT,
     tipo_permiso VARCHAR(50)
@@ -153,11 +149,7 @@ CREATE TABLE usuario_permiso(
     id_usuario int,
     id_permiso int
 );
-CREATE TABLE comprobante(
-    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    id_permiso INT,
-    id_tipo_comprobante INT
-);
+
 CREATE TABLE asistencia(
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     fecha DATE,
@@ -165,12 +157,7 @@ CREATE TABLE asistencia(
     hora_salida TIME(6),
     id_usuario INT
 );
-CREATE TABLE reporte (
-    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    hora_ingreso TIME(6),
-    hora_salida TIME(6),
-    id_usuario INT
-);
+
 ALTER TABLE contrato 
 ADD CONSTRAINT fk_tipo_contrato
 FOREIGN KEY (id_tipo_contrato)
@@ -291,23 +278,8 @@ ADD CONSTRAINT fk_id_permiso
 FOREIGN KEY (id_permiso)
 REFERENCES permiso(id);
 
-ALTER TABLE comprobante
-ADD CONSTRAINT fk_id_permiso_comprobante
-FOREIGN KEY (id_permiso)
-REFERENCES permiso(id);
-
-ALTER TABLE comprobante
-ADD CONSTRAINT fk_id_tipo_comprobante
-FOREIGN KEY (id_tipo_comprobante)
-REFERENCES tipo_comprobante(id);
-
 ALTER TABLE asistencia
 ADD CONSTRAINT fk_id_usuario_asistencia
-FOREIGN KEY (id_usuario)
-REFERENCES usuario(id);
-
-ALTER TABLE reporte
-ADD CONSTRAINT fk_id_usuario_reporte
 FOREIGN KEY (id_usuario)
 REFERENCES usuario(id);
 

@@ -25,19 +25,43 @@ IF EXISTS (SELECT * FROM arl WHERE nombre = NEW.nombre) THEN
 DELIMITER ;
 
 /*Before Insert asistencia*/
-
-/*Before Insert comprobante*/
-DROP TRIGGER IF EXISTS `quantum`.`comprobante_BEFORE_INSERT`;
+DROP TRIGGER IF EXISTS `quantum`.`asistencia_BEFORE_INSERT`;
 
 DELIMITER $$
 USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` TRIGGER `quantum`.`comprobante_BEFORE_INSERT` BEFORE INSERT ON `comprobante` FOR EACH ROW
+CREATE DEFINER = CURRENT_USER TRIGGER `quantum`.`asistencia_BEFORE_INSERT` BEFORE INSERT ON `asistencia` FOR EACH ROW
 BEGIN
-IF EXISTS (SELECT * FROM comprobante WHERE id_permiso = NEW.id_permiso) THEN
- SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El id del permiso ya existe en la base de datos.';
+   DECLARE registros INT;
+
+  IF NEW.hora_ingreso IS NOT NULL THEN
+    SELECT COUNT(*) INTO registros
+    FROM asistencia
+    WHERE id_usuario = NEW.id_usuario
+      AND fecha = NEW.fecha
+      AND hora_ingreso IS NOT NULL;
+
+    IF registros > 0 THEN
+      SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Ya existe un registro de ingreso para este usuario en esta fecha.';
     END IF;
+  END IF;
+  
+  IF NEW.hora_salida IS NOT NULL THEN
+    SELECT COUNT(*) INTO registros
+    FROM asistencia
+    WHERE id_usuario = NEW.id_usuario
+      AND fecha = NEW.fecha
+      AND hora_salida IS NOT NULL;
+
+    IF registros > 0 THEN
+      SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Ya existe un registro de salida para este usuario en esta fecha.';
+    END IF;
+  END IF;
+
+END$$
 DELIMITER ;
+
 
 /*Before Insert contacto_emergencia*/
 DROP TRIGGER IF EXISTS `quantum`.`contacto_emergencia_BEFORE_INSERT`;
@@ -231,34 +255,16 @@ IF EXISTS (SELECT * FROM rol WHERE nombre = NEW.nombre) THEN
 END$$
 DELIMITER ;
 
-/*--------------------------------------------------------------*/
-/*--------------------------------------------------------------*/
-/*--------------------------------------------------------------*/
 /*Before insert rol_usuario*/
-DROP TRIGGER IF EXISTS `quantum`.`rol_usuario_BEFORE_INSERT`;
+DROP TRIGGER IF EXISTS `quantum`.`soporte_BEFORE_INSERT`;
 
 DELIMITER $$
 USE `quantum`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `quantum`.`rol_usuario_BEFORE_INSERT` BEFORE INSERT ON `rol_usuario` FOR EACH ROW
+CREATE DEFINER = CURRENT_USER TRIGGER `quantum`.`soporte_BEFORE_INSERT` BEFORE INSERT ON `soporte` FOR EACH ROW
 BEGIN
-IF EXISTS (SELECT * FROM rol_usuario WHERE nombre = NEW.nombre) THEN
+IF EXISTS (SELECT * FROM soporte WHERE url = NEW.url) THEN
  SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El tipo de rol ya esta registrado en la base de datos';
-    END IF;
-END$$
-DELIMITER ;
-
-
-/*Before insert tipo_comprobante*/ 
-DROP TRIGGER IF EXISTS `quantum`.`tipo_comprobante_BEFORE_INSERT`;
-
-DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `quantum`.`tipo_comprobante_BEFORE_INSERT` BEFORE INSERT ON `tipo_comprobante` FOR EACH ROW
-BEGIN
-IF EXISTS (SELECT * FROM tipo_comprobante WHERE tipo_comprobante = NEW.tipo_comprobante) THEN
- SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El tipo de comprobante ya esta registrado en la base de datos';
+        SET MESSAGE_TEXT = 'La URL ya esta registrada en la base de datos';
     END IF;
 END$$
 DELIMITER ;
@@ -308,6 +314,20 @@ IF EXISTS (SELECT * FROM tipo_permiso WHERE tipo_permiso = NEW.tipo_permiso) THE
 END$$
 DELIMITER ;
 
+/*Before insert tipo_soporte*/ 
+DROP TRIGGER IF EXISTS `quantum`.`tipo_soporte_BEFORE_INSERT`;
+
+DELIMITER $$
+USE `quantum`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `quantum`.`tipo_soporte_BEFORE_INSERT` BEFORE INSERT ON `tipo_soporte` FOR EACH ROW
+BEGIN
+IF EXISTS (SELECT * FROM tipo_soporte WHERE tipo_soporte = NEW.tipo_soporte) THEN
+ SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El tipo de soporte ya esta registrado en la base de datos';
+    END IF;
+END$$
+DELIMITER ;
+
 
 /*Before insert turno*/ 
 DROP TRIGGER IF EXISTS `quantum`.`turno_BEFORE_INSERT`;
@@ -319,22 +339,6 @@ BEGIN
 IF EXISTS (SELECT * FROM turno WHERE hora_ingreso = NEW.hora_ingreso AND hora_salida=NEW.hora_salida AND id_jornada=NEW.id_jornada) THEN
  SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'El turno ya esta registrado en la base de datos';
-    END IF;
-END$$
-DELIMITER ;
-
-/*Before Insert usuario*/
-DROP TRIGGER IF EXISTS `quantum`.`usuario_BEFORE_INSERT`;
-
-DELIMITER $$
-USE `quantum`$$
-CREATE DEFINER=`root`@`localhost` TRIGGER `quantum`.`usuario_BEFORE_INSERT` BEFORE INSERT ON `usuario` FOR EACH ROW
-BEGIN
-IF EXISTS (SELECT * FROM usuario WHERE direccion = NEW.direccion or 
-numero_celular=new.numero_celular or 
-numero_documento=new.numero_documento) THEN
- SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La direccion, numero de contacto o numero de documento ya estan registrados en la base de datos';
     END IF;
 END$$
 DELIMITER ;
@@ -352,8 +356,44 @@ IF EXISTS (SELECT * FROM usuario WHERE nombre = NEW.nombre AND
                                         apellido_2=NEW.apellido_2 AND 
                                         direccion=NEW.direccion AND 
                                         numero_celular=NEW.numero_celular AND 
-                                        numero_documento=NEW.numero_documento) THEN
+                                        numero_documento=NEW.numero_documento or 
+                                        direccion = NEW.direccion or 
+                                        numero_celular=new.numero_celular or 
+                                        numero_documento=new.numero_documento) THEN
  SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'El usuario ya esta registrado en la base de datos';
     END IF;
 END$$
+
+
+/*Before insert usuario_permiso*/ 
+DROP TRIGGER IF EXISTS `quantum`.`usuario_permiso_BEFORE_INSERT`;
+
+DELIMITER $$
+USE `quantum`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `quantum`.`usuario_permiso_BEFORE_INSERT` BEFORE INSERT ON `usuario_permiso` FOR EACH ROW
+BEGIN
+IF EXISTS (SELECT * FROM usuario_permiso WHERE id_permiso=new.id_permiso) THEN
+ SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Este registro ya esta existe en la base de datos';
+    END IF;
+END$$
+DELIMITER ;
+/*--------------------------------------------------------------*/
+/*--------------------------------------------------------------*/
+/*--------------------------------------------------------------*/
+/*Hacer la trazabilidad con el estado*/
+
+DROP TRIGGER IF EXISTS `quantum`.`permiso_AFTER_UPDATE`;
+
+DELIMITER $$
+USE `quantum`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `quantum`.`permiso_AFTER_UPDATE` AFTER UPDATE ON `permiso` FOR EACH ROW
+BEGIN
+  IF OLD.id_estado_permiso <> NEW.id_estado_permiso THEN
+    INSERT INTO usuario_permiso(trazabilidad,fecha)
+    VALUES (CONCAT("Antes:",OLD.id_estado_permiso," Ahora: ",NEW.id_estado_permiso), CURDATE());
+  END IF;
+END$$
+DELIMITER ;
+
