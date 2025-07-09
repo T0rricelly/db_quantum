@@ -351,29 +351,29 @@ END$$
 
 DELIMITER ;
 
-USE `quantum`;
-DROP procedure IF EXISTS `insertpermiso`;
-
 DELIMITER $$
-USE `quantum`$$
-CREATE PROCEDURE `insertpermiso`(
 
-	IN fecha date,
-	IN dias tinyint(3),
-	IN fecha_solicitud date, 
-	IN id_estado_permiso tinyint(3), 
-	IN id_tipo_permiso tinyint(3), 
-	IN id_soporte int(11)
-
+CREATE PROCEDURE insertpermiso(
+    IN fecha DATE,
+    IN dias TINYINT,
+    IN fecha_solicitud DATE,
+    IN id_estado_permiso TINYINT,
+    IN id_tipo_permiso TINYINT,
+    IN id_soporte INT
 )
 BEGIN
-
-	INSERT INTO permiso (fecha, dias, fecha_solicitud, id_estado_permiso, id_tipo_permiso, id_soporte)
-    VALUES (fecha, dias, fecha_solicitud, id_estado_permiso, id_tipo_permiso, id_soporte);
-
-END$$
+    INSERT INTO permiso (
+        fecha, dias, fecha_solicitud,
+        id_estado_permiso, id_tipo_permiso, id_soporte
+    )
+    VALUES (
+        fecha, dias, fecha_solicitud,
+        id_estado_permiso, id_tipo_permiso, id_soporte
+    );
+END $$
 
 DELIMITER ;
+
 
 USE `quantum`;
 DROP procedure IF EXISTS `insertrh`;

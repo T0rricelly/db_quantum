@@ -435,7 +435,7 @@ AFTER INSERT ON permiso
 FOR EACH ROW
 BEGIN
   INSERT INTO usuario_permiso (trazabilidad, fecha, id_usuario, id_permiso)
-  VALUES ('Permiso creado', CURDATE(), (SELECT id_usuario FROM usuario WHERE id_contrato = NEW.id_estado_permiso LIMIT 1), NEW.id);
+  VALUES ('Permiso creado', CURDATE(), (SELECT id FROM usuario WHERE id_contrato = NEW.id_estado_permiso LIMIT 1), NEW.id);
 END$$
 DELIMITER ;
 
