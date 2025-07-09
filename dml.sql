@@ -126,6 +126,9 @@ CALL insertgrupo_sanguineo('AB', 2);
 -- contacto_emergencia 
 CALL insertcontacto_emergencia('Juan', 'Lotero', 'Moreno', 3112345678, 1, 1);
 CALL insertcontacto_emergencia('Juan', 'Loteroooo', 'Moreno', 3112345677, 1, 1);
+-- permiso
+CALL insertpermiso('2025-06-10', 5, '2025-06-01', 1, 1,2);
+CALL insertpermiso('2025-06-05', 2, '2025-05-30', 2, 2,1);
 -- usuario 
 CALL insertusuario(
     'Kevin',
@@ -180,9 +183,7 @@ CALL insertusuario(
     2
 );
 
--- permiso
-CALL insertpermiso('2025-06-10', 5, '2025-06-01', 1, 1,2);
-CALL insertpermiso('2025-06-05', 2, '2025-05-30', 2, 2,1);
+
 
 -- asistencia 
 CALL insertasistencia(1);
@@ -192,6 +193,92 @@ CALL insertrol_usuario(1,2,'2024-07-01', '2025-07-01', 1, 1);
 CALL insertrol_usuario(2,1,'2024-08-01', NULL, 1, 2);
 
 -- insertusuario_permiso
-CALL insertusuario_permiso(2,2);
-CALL insertusuario_permiso(1,1);
 
+
+
+SELECT 
+    u.id, u.nombre, u.apellido_1, 
+    td.tipo_documento, u.numero_documento,
+    ec.tipo AS estado_civil,
+    gs.grupo_sanguineo, rh.rh,
+    arl.nombre AS arl,
+    eps.nombre AS eps,
+    t.hora_ingreso AS ingreso_turno, t.hora_salida AS salida_turno,
+    j.tipo_jornada
+FROM usuario u
+JOIN tipo_documento td ON u.id_tipo_documento = td.id
+JOIN estado_civil ec ON u.id_tipo_estado_civil = ec.id
+JOIN grupo_sanguineo gs ON u.id_grupo_sanguineo = gs.id
+JOIN rh ON gs.id_rh = rh.id
+JOIN arl ON u.id_arl = arl.id
+JOIN eps ON u.id_eps = eps.id
+JOIN turno t ON u.id_turno = t.id
+JOIN jornada j ON t.id_jornada = j.id;
+SELECT 
+    u.id, u.nombre, u.apellido_1, 
+    td.tipo_documento, u.numero_documento,
+    ec.tipo AS estado_civil,
+    gs.grupo_sanguineo, rh.rh,
+    arl.nombre AS arl,
+    eps.nombre AS eps,
+    t.hora_ingreso AS ingreso_turno, t.hora_salida AS salida_turno,
+    j.tipo_jornada
+FROM usuario u
+JOIN tipo_documento td ON u.id_tipo_documento = td.id
+JOIN estado_civil ec ON u.id_tipo_estado_civil = ec.id
+JOIN grupo_sanguineo gs ON u.id_grupo_sanguineo = gs.id
+JOIN rh ON gs.id_rh = rh.id
+JOIN arl ON u.id_arl = arl.id
+JOIN eps ON u.id_eps = eps.id
+JOIN turno t ON u.id_turno = t.id
+JOIN jornada j ON t.id_jornada = j.id;
+SELECT 
+    ru.id_usuario, ru.fecha_inicio, ru.fecha_fin,
+    r.nombre AS rol,
+    er.tipo AS estado_rol,
+    aa.nombre AS area_asignada
+FROM Rol_Usuario ru
+JOIN rol r ON ru.id_rol = r.id
+JOIN estado_rol er ON ru.id_estado_rol = er.id
+JOIN area_asignada aa ON ru.id_area = aa.id;
+SELECT 
+    p.id, p.fecha, p.dias, p.fecha_solicitud,
+    tp.tipo_permiso,
+    ep.tipo_estado AS estado_permiso,
+    ts.tipo_soporte,
+    s.url AS soporte_url
+FROM permiso p
+JOIN tipo_permiso tp ON p.id_tipo_permiso = tp.id
+JOIN estado_permiso ep ON p.id_estado_permiso = ep.id
+JOIN soporte s ON p.id_soporte = s.id
+JOIN tipo_soporte ts ON s.id_tipo_soporte = ts.id;
+SELECT 
+    ce.nombre_contacto, ce.apellido_1, ce.numero_celular,
+    p.tipo_parentesco,
+    gs.grupo_sanguineo, rh.rh
+FROM contacto_emergencia ce
+JOIN parentesco p ON ce.id_tipo_parentesco = p.id
+JOIN grupo_sanguineo gs ON ce.id_grupo_sanguineo = gs.id
+JOIN rh ON gs.id_rh = rh.id;
+ SELECT 
+    a.fecha, a.hora_ingreso, a.hora_salida,
+    u.nombre, u.apellido_1
+FROM asistencia a
+JOIN usuario u ON a.id_usuario = u.id;
+SELECT 
+    gs.grupo_sanguineo,
+    rh.rh
+FROM grupo_sanguineo gs
+JOIN rh ON gs.id_rh = rh.id;
+SELECT 
+    t.hora_ingreso, t.hora_salida,
+    j.tipo_jornada
+FROM turno t
+JOIN jornada j ON t.id_jornada = j.id;
+SELECT 
+    up.fecha, up.trazabilidad,
+    u.nombre AS usuario,
+    p.fecha AS fecha_permiso
+FROM usuario_permiso up
+JOIN usuario u ON up.id_usuario = u.id
+JOIN permiso p ON up.id_permiso = p.id;
