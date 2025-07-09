@@ -2,26 +2,21 @@ USE `quantum`;
 
 -- tablas fuertes
 
--- tipo_soporte
-CALL inserttipo_soporte('Permiso Especial');
-CALL inserttipo_soporte('Certificado Médico');
-CALL inserttipo_soporte('Justificante Estudio');
-
 -- tipo_documento
 CALL inserttipo_documento('Cédula de Ciudadanía');
 CALL inserttipo_documento('Cédula de Extranjería');
 CALL inserttipo_documento('Pasaporte');
 CALL inserttipo_documento('Tarjeta de Identidad');
 
--- tipo_comprobante
+-- tipo_soporte
 
-CALL inserttipo_comprobante('Certificado médico');
-CALL inserttipo_comprobante('Comprobantes de Nacimiento');
-CALL inserttipo_comprobante('Documentación de Calamidad Doméstica');
-CALL inserttipo_comprobante('Solicitudes por Escrito');
-CALL inserttipo_comprobante('Documentos de Instituciones Educativas');
-CALL inserttipo_comprobante('Actas de Funcionarios Sindicales');
-CALL inserttipo_comprobante('Documentos de Autoridades Públicas');
+CALL inserttipo_soporte('Certificado médico');
+CALL inserttipo_soporte('Comprobantes de Nacimiento');
+CALL inserttipo_soporte('Documentación de Calamidad Doméstica');
+CALL inserttipo_soporte('Solicitudes por Escrito');
+CALL inserttipo_soporte('Documentos de Instituciones Educativas');
+CALL inserttipo_soporte('Actas de Funcionarios Sindicales');
+CALL inserttipo_soporte('Documentos de Autoridades Públicas');
 
 -- tipo_permiso
 CALL inserttipo_permiso('Vacaciones');
@@ -156,7 +151,7 @@ CALL insertusuario(
     'Calle 83 #80-72, Bogota',
     3077845979,
     1764538,
-    "",
+    456,
     1,
     1,
     1,
@@ -174,7 +169,7 @@ CALL insertusuario(
     'Carrera 10 #20-30, Medellín',
     3129876543,
     87654321,
-    "",
+    123,
     2,
     2,
     2,
@@ -187,22 +182,16 @@ CALL insertusuario(
 
 -- permiso
 CALL insertpermiso('2025-06-10', 5, '2025-06-01', 1, 1,2);
-CALL insertpermiso('2025-06-05', 2, '2025-05-30', 2, 2,2);
-
--- comprobante 
-CALL insertcomprobante(1, 1);
-CALL insertcomprobante(2, 2);
+CALL insertpermiso('2025-06-05', 2, '2025-05-30', 2, 2,1);
 
 -- asistencia 
-CALL insertasistencia( 1);
-CALL insertasistencia( 2);
+CALL insertasistencia(1);
+CALL insertasistencia(2);
 -- rol_usuario
 CALL insertrol_usuario(1,2,'2024-07-01', '2025-07-01', 1, 1);
 CALL insertrol_usuario(2,1,'2024-08-01', NULL, 1, 2);
--- reporte 
-CALL insertreporte('08:00:00', '17:00:00', 1);
-CALL insertreporte('09:00:00', '18:00:00', 2);
 
 -- insertusuario_permiso
-CALL insertusuario_permiso("",2,2);
-CALL insertusuario_permiso("",1,1);
+CALL insertusuario_permiso(2,2);
+CALL insertusuario_permiso(1,1);
+

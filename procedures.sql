@@ -48,30 +48,12 @@ CREATE PROCEDURE `insertasistencia`(
 BEGIN
 
 	INSERT INTO asistencia(fecha, hora_ingreso, hora_salida, id_usuario)
-	VALUES (now(), now(), now(), f_USU);
+	VALUES (CURDATE(),CURTIME() ,CURTIME() , f_USU);
     
 END$$
 
 DELIMITER ;
 
-USE `quantum`;
-DROP procedure IF EXISTS `insertcomprobante`;
-
-DELIMITER $$
-USE `quantum`$$
-CREATE PROCEDURE `insertcomprobante` (
-
-	IN f_perm INT(11),
-    IN f_t_comp INT(11)
-    
-)
-BEGIN
-	INSERT INTO comprobante (id_permiso, id_tipo_comprobante)
-    VALUES (f_perm, f_t_comp);
-
-END$$
-
-DELIMITER ;
 
 USE `quantum`;
 DROP procedure IF EXISTS `insertcontacto_emergencia`;
@@ -160,14 +142,13 @@ DELIMITER $$
 USE `quantum`$$
 CREATE PROCEDURE `insertusuario_permiso` (
 
-	IN trazabilidad varchar(300),
 	IN id_usuario int(11),
 	IN id_permiso int(11)
     
 )
 BEGIN
-	INSERT INTO usuario_permiso (trazabilidad, fecha, id_usuario, id_permiso)
-    VALUES (trazabilidad, now(), id_usuario, id_permiso);
+	INSERT INTO usuario_permiso (fecha, id_usuario, id_permiso)
+    VALUES (CURDATE() , id_usuario, id_permiso);
 END$$
 
 DELIMITER ;
@@ -395,27 +376,6 @@ END$$
 DELIMITER ;
 
 USE `quantum`;
-DROP procedure IF EXISTS `insertreporte`;
-
-DELIMITER $$
-USE `quantum`$$
-CREATE PROCEDURE `insertreporte`(
-
-	IN hora_ingreso time(6), 
-	IN hora_salida time(6), 
-	IN id_usuario int(11)
-
-)
-BEGIN
-
-	INSERT INTO reporte (hora_ingreso, hora_salida, id_usuario)
-    VALUES (hora_ingreso, hora_salida, id_usuario);
-
-END$$
-
-DELIMITER ;
-
-USE `quantum`;
 DROP procedure IF EXISTS `insertrh`;
 
 DELIMITER $$
@@ -484,26 +444,6 @@ CREATE PROCEDURE `inserttipo_soporte` (
 BEGIN
 	INSERT INTO tipo_soporte (tipo_soporte)
     VALUES (tipo_soporte);
-END$$
-
-DELIMITER ;
-
-
-USE `quantum`;
-DROP procedure IF EXISTS `inserttipo_comprobante`;
-
-DELIMITER $$
-USE `quantum`$$
-CREATE PROCEDURE `inserttipo_comprobante`(
-
-	IN tipo_comprobante varchar(100)
-
-)
-BEGIN
-
-	INSERT INTO tipo_comprobante (tipo_comprobante)
-    VALUES (tipo_comprobante);
-
 END$$
 
 DELIMITER ;
@@ -638,24 +578,6 @@ BEGIN
 		hora_ingreso = p_hora_ingreso,
 		hora_salida = p_hora_salida,
 		id_usuario = p_id_usuario 
-	WHERE id = p_id;
-END$$
-DELIMITER ;
-
-
-/* updatecomprobante */
-
-DROP PROCEDURE IF EXISTS `updatecomprobante`;
-DELIMITER $$
-CREATE PROCEDURE `updatecomprobante`(
-	IN p_id INT(11),
-	IN p_id_permiso INT(11), 
-	IN p_id_tipo_comprobante INT(11)
-)
-BEGIN
-	UPDATE comprobante 
-	SET id_permiso = p_id_permiso, 
-		id_tipo_comprobante = p_id_tipo_comprobante 
 	WHERE id = p_id;
 END$$
 DELIMITER ;
@@ -952,26 +874,6 @@ END$$
 DELIMITER ;
 
 
-/* updatereporte */
-
-DROP PROCEDURE IF EXISTS `updatereporte`;
-DELIMITER $$
-CREATE PROCEDURE `updatereporte`(
-	IN p_id INT(11),
-	IN p_hora_ingreso TIME(6), 
-	IN p_hora_salida TIME(6), 
-	IN p_id_usuario INT(11)
-)
-BEGIN
-	UPDATE reporte 
-	SET hora_ingreso = p_hora_ingreso,
-		hora_salida = p_hora_salida,
-		id_usuario = p_id_usuario 
-	WHERE id = p_id;
-END$$
-DELIMITER ;
-
-
 /* updaterh */
 
 DROP PROCEDURE IF EXISTS `updaterh`;
@@ -1017,22 +919,6 @@ BEGIN
 	UPDATE soporte 
 	SET nombre = p_nombre,
 		url = p_url 
-	WHERE id = p_id;
-END$$
-DELIMITER ;
-
-
-/* updatetipo_comprobante */
-
-DROP PROCEDURE IF EXISTS `updatetipo_comprobante`;
-DELIMITER $$
-CREATE PROCEDURE `updatetipo_comprobante`(
-	IN p_id INT(11),
-	IN p_tipo_comprobante VARCHAR(100)
-)
-BEGIN
-	UPDATE tipo_comprobante 
-	SET tipo_comprobante = p_tipo_comprobante 
 	WHERE id = p_id;
 END$$
 DELIMITER ;
