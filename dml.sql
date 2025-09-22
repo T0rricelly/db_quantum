@@ -64,6 +64,7 @@ CALL insertarl('Positiva');
 CALL insertarl('Sura');
 CALL insertarl('Colmena');
 CALL insertarl('Bolívar');
+CALL insertarl('Colpatria');
 
 -- rh 
 CALL insertrh('+');
@@ -87,6 +88,10 @@ CALL inserteps('Sura');
 CALL inserteps('Sanitas');
 CALL inserteps('Compensar');
 CALL inserteps('Coomeva');
+CALL inserteps('Nueva Eps');
+CALL inserteps('Famisanar');
+CALL inserteps('Salud Total');
+CALL inserteps('Cafam');
 
 -- soporte 
 CALL insertsoporte(2,'http://www.minsalud.gov.co/certificado_medico.pdf');
